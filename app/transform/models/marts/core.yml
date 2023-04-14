@@ -1,0 +1,38 @@
+version: 2
+
+models:
+  - name: dim_station
+    description: Station dimension table
+    columns:
+      - name: station_id
+        tests:
+          - unique
+          - not_null
+      - name: local_measurement_timezone
+      - name: local_measurement_timezone_text
+        tests:
+          - accepted_values:
+              values: ['PST', 'MST', 'CST', 'EST', 'AST']
+      - name: city_name
+      - name: latitude
+      - name: longitude
+  - name: fact_air_quality
+    description: Air quality fact table
+    columns:
+      - name: station_id
+        tests:
+          - not_null
+      - name: local_measurement_time
+      - name: local_measurement_timezone_text
+        tests:
+          - accepted_values:
+              values: ['PST', 'MST', 'CST', 'EST', 'AST']
+      - name: carbon_monoxide,
+      - name: humidity,
+      - name: ozone,
+      - name: pressure,
+      - name: pm_10,
+      - name: pm_2_5,
+      - name: sulfur_dioxide,
+      - name: temperature,
+      - name: wind_speed

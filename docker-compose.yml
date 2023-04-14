@@ -1,0 +1,177 @@
+version: "3.7"
+
+services:
+  # This service runs the postgres DB used by dagster for run storage, schedule storage, and event log storage
+  dagster_metadata_db:
+    image: postgres:11
+    container_name: dagster_metadata_db
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: dagster_metadata
+    networks:
+      - dagster_network
+  
+  # This service runs the gRPC server that loads and executes user code, in both dagit and dagster-daemon
+  dagster_code_runner:
+    build:
+      context: .
+      dockerfile: ./container/user_code/Dockerfile
+    container_name: dagster_code_runner
+    image: dagster_code_runner_image
+    restart: always
+    env_file: .env
+    environment:
+      DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
+      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
+      DAGSTER_POSTGRES_DB: dagster_metadata
+      DAGSTER_CURRENT_IMAGE: "dagster_code_runner_image"
+      WAREHOUSE_USER: ${WAREHOUSE_USER}
+      WAREHOUSE_PASSWORD: ${WAREHOUSE_PASSWORD}
+      WAREHOUSE_DB: warehouse
+      WAREHOUSE_HOST: warehouse_db
+      WAREHOUSE_PORT: 5432
+    networks:
+      - dagster_network
+    ports:
+      - "8080:8080"
+
+  warehouse_db:
+    image: postgres:13
+    container_name: warehouse_db
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: warehouse
+    volumes:
+      - ./warehouse_db_setup:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - "5432:5432"
+    networks:
+      - dagster_network
+
+  metabase_db:
+    image: postgres
+    container_name: metabase_db
+    env_file: .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: metabase
+    restart: always
+    ports:
+      - "5433:5432"
+    networks:
+      - dagster_network
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    restart: always
+    env_file: .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "5050:80"
+    networks:
+      - dagster_network
+    
+  # This service runs dagit, which loads the user code from the user code container
+  # Since our instance uses the QueuedRunCoordinator, any runs submitted from dagit will be put on a queue
+  # and later dequeued and launched by dagster-daemon
+  dagit_server:
+    build:
+      context: .
+      dockerfile: ./container/dagster/Dockerfile
+    entrypoint:
+      - dagit
+      - -h
+      - "0.0.0.0"
+      - -p
+      - "3000"
+      - -w
+      - workspace.yaml
+    container_name: dagit_server
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
+    env_file: .env
+    environment:
+      DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
+      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
+      DAGSTER_POSTGRES_DB: dagster_metadata
+    volumes:
+      # Make docker client accessible so we can terminate containers from dagit
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      - dagster_network
+    depends_on:
+      - dagster_metadata_db
+      - dagster_code_runner
+  
+  # This service runs the dagster-daemon process, which is responsible for taking runs
+  # off of the queue and launching them, as well as creating runs from schedules or sensors
+  dagster_daemon:
+    build:
+      context: .
+      dockerfile: ./container/dagster/Dockerfile
+    entrypoint:
+      - dagster-daemon
+      - run
+    container_name: dagster_daemon
+    restart: on-failure
+    env_file: .env
+    environment:
+      DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
+      DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
+      DAGSTER_POSTGRES_DB: dagster_metadata
+    volumes:
+      # Make docker client accessible so we can launch containers using host docker
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/io_manager_storage:/tmp/io_manager_storage
+    networks:
+      - dagster_network
+    depends_on:
+      - dagster_metadata_db
+      - dagster_code_runner
+
+  formatter:
+    image: formatter
+    container_name: formatter
+    build:
+      context: .
+      dockerfile: ./container/formatter/Dockerfile
+    volumes:
+      - ./:/code
+    networks:
+      - dagster_network
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: ./container/metabase/Dockerfile
+    container_name: dashboard
+    ports:
+      - "3001:3000"
+    env_file: .env
+    environment:
+      MB_DB_TYPE: postgres
+      MB_DB_DBNAME: metabase
+      MB_DB_PORT: 5432
+      MB_DB_USER: ${MB_DB_USER}
+      MB_DB_PASS: ${MB_DB_PASS}
+      MB_DB_HOST: metabase_db
+    networks:
+      - dagster_network
+
+networks:
+  dagster_network:
+    driver: bridge
+    name: dagster_network

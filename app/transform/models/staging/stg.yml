@@ -1,0 +1,24 @@
+version: 2
+
+models:
+  - name: stg_station_feed_data
+    description: Air quality staging table
+    columns:
+      - name: station_id
+        tests:
+          - not_null
+      - name: local_measurement_time
+      - name: local_measurement_timezone
+      - name: local_measurement_timezone_text
+      - name: city_name
+      - name: latitude
+      - name: longitude
+      - name: carbon_monoxide,
+      - name: humidity,
+      - name: ozone,
+      - name: pressure,
+      - name: pm_10,
+      - name: pm_2_5,
+      - name: sulfur_dioxide,
+      - name: temperature,
+      - name: wind_speed
