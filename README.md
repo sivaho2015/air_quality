@@ -5,15 +5,15 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 
 # Architecture diagram
 
-![Architecture](https://github.com/sivaho2015/air_quality/blob/main/assets/images/arch_diagram.png?raw=true)
+![Architecture](assets/images/arch_diagram.png?raw=true)
 
 # Dagster data pipeline
 
-![Pipeline] (https://github.com/sivaho2015/air_quality/blob/main/assets/images/pipeline.png)
+![Pipeline](assets/images/pipeline.png)
 
 # Metabase dashboard
 
-![Dashboard] (https://github.com/sivaho2015/air_quality/blob/main/assets/images/dashboard.png)
+![Dashboard](assets/images/dashboard.png)
 
 ## Setup
 
