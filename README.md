@@ -16,6 +16,96 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 
 ![Dashboard](assets/images/dashboard.png)
 
+# Directory Tree
+
+```
+./
+│
+├── app/
+│   │
+│   ├── jobs/
+│   │   └── data_ingestion.py
+│   │
+│   ├── ops/
+│   │   └── extract_load.py
+│   │
+│   ├── schedules/
+│   │   └── data_ingestion_schedule.py
+│   │
+│   ├── transform/
+│   │   │
+│   │   ├── logs/
+│   │   │
+│   │   ├── models/
+│   │   │   │
+│   │   │   ├── marts/
+│   │   │   │   ├── core.yml
+│   │   │   │   ├── dim_station.sql
+│   │   │   │   └── fact_air_quality.sql
+│   │   │   │
+│   │   │   └── staging/
+│   │   │       ├── src.yml
+│   │   │       ├── stg.yml
+│   │   │       └── stg_station_feed_data.sql
+│   │   │
+│   │   │
+│   │   ├── dbt_project.yml
+│   │   └── profiles.yml
+│   │
+│   ├── utils/
+│   │   ├── config.py
+│   │   ├── db.py
+│   │   └── helpers.py
+│   │
+│   └── repository.py
+│
+├── assets/
+│   │
+│   └── images/
+│       ├── arch_diagram.png
+│       ├── dagster_pipeline.png
+│       ├── dagster_run.png
+│       └── dashboard.png
+│
+│
+├── container/
+│   │
+│   ├── dagster/
+│   │   └── Dockerfile
+│   │
+│   ├── formatter/
+│   │   ├── Dockerfile
+│   │   └── requirements.txt
+│   │
+│   ├── metabase/
+│   │   └── Dockerfile
+│   │
+│   └── user_code/
+│       └── Dockerfile
+│
+│
+├── data/
+│   └── .gitkeep
+│
+├── test/
+│   │
+│   └── unit/
+│       ├── test_extract_load_unit.py
+│       └── test_utils_unit.py
+│
+│
+├── warehouse_db_setup/
+│   └── create_tables.sql
+│
+├── .env
+├── .gitignore
+├── Makefile
+├── README.md
+├── dagster.yaml
+├── docker-compose.yml
+└── workspace.yaml
+```
+
 ## Setup
 
 ### Pre-requisites
