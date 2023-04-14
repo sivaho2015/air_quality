@@ -4,8 +4,7 @@ Fetch real-time air quality data using aqicn.org API and load the data into a Po
 Metabase is then used to do analysis on air quality in the US and create a dashboard.
 
 # Architecture diagram
-
-![Architecture](assets/images/arch_diagram.png?raw=true)
+![Architecture](assets/images/arch_diagram.png)
 
 # Dagster data pipeline
 
