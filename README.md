@@ -8,7 +8,9 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 
 # Dagster data pipeline
 
-![Pipeline](assets/images/pipeline.png)
+![Pipeline](assets/images/dagster_pipeline.png)
+
+![Run](assets/images/dagster_run.png)
 
 # Metabase dashboard
 
