@@ -20,7 +20,8 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 
 1. [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 2. [Github account](https://github.com/)
-3. [Docker](https://docs.docker.com/engine/install/) with at least 4GB of RAM and [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
+3. [Air Quality Open Data Platform API Token](https://aqicn.org/data-platform/token/)
+4. [Docker](https://docs.docker.com/engine/install/) with at least 4GB of RAM and [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 
 Run these commands to set up the project locally.
 
@@ -29,6 +30,8 @@ Run these commands to set up the project locally.
 git clone https://github.com/sivaho2015/air_quality.git
 cd air_quality
 
+# Enter your database connection credentials and API token in .env file
+
 # Local run & test
 make up # start the docker containers on your computer
 make ci # runs auto formatting, lint checks, and all test files under ./tests
@@ -36,7 +39,7 @@ make ci # runs auto formatting, lint checks, and all test files under ./tests
 
 ### Tear down infra
 
-Run these commands to tear down infrastructure
+Run this command to tear down infrastructure
 
 ```shell
 make down # stop docker containers on your computer
@@ -46,5 +49,6 @@ make down # stop docker containers on your computer
 
 1. [Dagster docs](https://docs.dagster.io/tutorial)
 2. [Metabase docs](https://www.metabase.com/learn/getting-started/getting-started.html)
-4. [Dagster docker setup](https://github.com/dagster-io/dagster/tree/0.14.17/examples/deploy_docker)
-5. [dbt docs](https://docs.getdbt.com/)
+3. [Dagster docker setup](https://github.com/dagster-io/dagster/tree/0.14.17/examples/deploy_docker)
+4. [dbt docs](https://docs.getdbt.com/)
+5. [aqicn.org API docs](https://aqicn.org/json-api/doc/)
