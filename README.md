@@ -1,13 +1,16 @@
-# Data engineering project: Air quality data extraction to analysis
+# Data engineering project: air quality data extraction to analysis
+
+Fetch real-time air quality data using aqicn.org API and load the data into a PostgreSQL warehouse. Use dbt to transform data and create dimension and fact tables.
+Metabase is then used to do analysis on air quality in the US and create a dashboard.
 
 # Architecture diagram
-![Architecture] (/assets/images/arch_diagram.png)
+![Architecture] (assets/images/arch_diagram.png)
 
 # Dagster data pipeline
-![Pipeline] (/assets/images/pipeline.png)
+![Pipeline] (assets/images/pipeline.png)
 
 # Metabase dashboard
-![Dashboard] (/assets/images/dashboard.png)
+![Dashboard] (assets/images/dashboard.png)
 
 ## Setup
 
