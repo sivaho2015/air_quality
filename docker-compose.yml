@@ -37,6 +37,7 @@ services:
     ports:
       - "8080:8080"
 
+  # Database that stores air quality data
   warehouse_db:
     image: postgres:13
     container_name: warehouse_db
@@ -54,6 +55,7 @@ services:
     networks:
       - dagster_network
 
+  # Database that stores Metabase metadata
   metabase_db:
     image: postgres
     container_name: metabase_db
@@ -142,6 +144,7 @@ services:
       - dagster_metadata_db
       - dagster_code_runner
 
+  # Format code and run unit tests
   formatter:
     image: formatter
     container_name: formatter
@@ -153,6 +156,7 @@ services:
     networks:
       - dagster_network
 
+  # Metabase dashboard
   dashboard:
     build:
       context: .
