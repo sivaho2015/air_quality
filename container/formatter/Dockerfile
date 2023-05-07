@@ -12,4 +12,5 @@ RUN pip install -r requirements.txt
 # copy repo
 COPY ../../ /code/
 
+# entry point for formatter container
 ENTRYPOINT ["tail", "-f", "/dev/null"]
