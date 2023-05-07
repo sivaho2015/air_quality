@@ -8,6 +8,7 @@ sources:
         columns:
           - name: station_id
             tests:
+              - unique
               - not_null
           - name: local_measurement_time
           - name: local_measurement_timezone
