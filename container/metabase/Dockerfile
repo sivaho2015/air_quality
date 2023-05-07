@@ -4,7 +4,7 @@ FROM adoptopenjdk/openjdk11:debianslim-jre
 
 ENV FC_LANG en-US LC_CTYPE en_US.UTF-8
 
-# dependencies
+# Metabase dependencies
 RUN apt-get update -yq && apt-get install -yq bash ttf-dejavu fontconfig curl openjdk-11-jre-headless && \
     apt-get clean && \
     rm -rf /var/lib/{apt,dpkg,cache,log}/ && \
@@ -25,5 +25,5 @@ COPY --from=metabase/metabase:latest /app /app
 # expose our default runtime port
 EXPOSE 3000
 
-# run it
+# run metabase
 ENTRYPOINT ["/app/run_metabase.sh"]
