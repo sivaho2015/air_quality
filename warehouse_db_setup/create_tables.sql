@@ -1,3 +1,4 @@
+-- Set up a table that stores air quality data from API
 DROP SCHEMA IF EXISTS air_quality;
 CREATE SCHEMA air_quality;
 DROP TABLE IF EXISTS air_quality.station_feed;
