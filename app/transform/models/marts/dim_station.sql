@@ -5,14 +5,14 @@
         incremental_strategy='delete+insert'
     )
 }}
-with station_feed as (
-    select *
-    from {{ ref('stg_station_feed_data') }}
+WITH station_feed AS (
+    SELECT *
+    FROM {{ ref('stg_station_feed_data') }}
 )
-select distinct
+SELECT DISTINCT
     station_id,
     local_measurement_timezone_text,
     city_name,
     latitude,
     longitude
-from station_feed
+FROM station_feed
