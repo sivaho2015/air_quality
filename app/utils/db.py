@@ -1,5 +1,5 @@
 '''
-Classes for connecting to PostgreSQL database
+Classes for connecting to PostgreSQL database and used by extract_load.py
 '''
 from contextlib import contextmanager
 from dataclasses import dataclass
