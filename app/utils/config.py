@@ -6,7 +6,7 @@ import os
 from utils.db import DBConnection
 
 
-# Get database connection credentials from environment variables
+# Get database connection credentials from environment variables used by extract_load
 def get_warehouse_creds() -> DBConnection:
     return DBConnection(
         user=os.getenv("WAREHOUSE_USER", ""),
