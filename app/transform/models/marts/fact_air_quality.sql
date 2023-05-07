@@ -3,11 +3,11 @@
         materialized='incremental'
     )
 }}
-with station_feed as (
-    select *
-    from {{ ref('stg_station_feed_data') }}
+WITH station_feed AS (
+    SELECT *
+    FROM {{ ref('stg_station_feed_data') }}
 )
-select
+SELECT
     station_id,
     local_measurement_time,
     local_measurement_timezone_text,
@@ -20,10 +20,10 @@ select
     sulfur_dioxide,
     temperature,
     wind_speed
-from station_feed
+FROM station_feed
 
 {% if is_incremental() %}
 
-where date(local_measurement_time) > (select max(date(local_measurement_time)) from {{ this }})
+WHERE DATE(local_measurement_time) > (SELECT max(DATE(local_measurement_time)) FROM {{ this }})
 
 {% endif %}
