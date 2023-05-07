@@ -1,5 +1,5 @@
 '''
-Contain data transformation helper functions
+Contain data transformation helper functions used by extract_load.py
 '''
 
 
