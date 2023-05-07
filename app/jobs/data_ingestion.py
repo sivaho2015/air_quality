@@ -28,7 +28,6 @@ run_config = {
     }
 }
 
-
 # Construct data pipeline
 @job(resource_defs={"dbt": dbt_resource}, config=run_config)
 def data_ingestion():
