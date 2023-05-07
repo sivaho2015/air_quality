@@ -3,6 +3,7 @@
 
 FROM python:3.7-slim
 
+# Install dependent packages
 RUN pip install \
     dagster \
     dagster-postgres \
@@ -12,13 +13,13 @@ RUN pip install \
     dagster-dbt \
     dbt-core \
     dbt-postgres \
-    pandas \
     flatten_json \
     os
 
 WORKDIR /opt/dagster/app
 ENV PYTHONPATH=/app
 
+# Copy files in app to dagster app directory
 COPY ../../app /opt/dagster/app/
 
 # Run dagster gRPC server on port 4000
