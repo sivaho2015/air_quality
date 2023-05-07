@@ -3,6 +3,7 @@
 
 FROM python:3.7-slim
 
+# Install dagster packages
 RUN pip install \
     dagster \
     dagster-graphql \
