@@ -1,6 +1,7 @@
 config:
   send_anonymous_usage_stats: False
 
+# Define dbt profile
 transform:
   target: dev
   outputs:
