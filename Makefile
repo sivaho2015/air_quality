@@ -1,7 +1,7 @@
 ##############################################################################################################################
 # Spin up, shut down, and restart Docker containers
 up:
-	docker compose up --build -d
+	docker compose --env-file env up --build -d
 
 down:
 	docker compose down --volumes
