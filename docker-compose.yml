@@ -5,7 +5,6 @@ services:
   dagster_metadata_db:
     image: postgres:11
     container_name: dagster_metadata_db
-    env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -21,7 +20,6 @@ services:
     container_name: dagster_code_runner
     image: dagster_code_runner_image
     restart: always
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -41,7 +39,6 @@ services:
   warehouse_db:
     image: postgres:13
     container_name: warehouse_db
-    env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -59,7 +56,6 @@ services:
   metabase_db:
     image: postgres
     container_name: metabase_db
-    env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -74,7 +70,6 @@ services:
     container_name: pgadmin_container
     image: dpage/pgadmin4
     restart: always
-    env_file: .env
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -103,7 +98,6 @@ services:
       - "3000"
     ports:
       - "3000:3000"
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -129,7 +123,6 @@ services:
       - run
     container_name: dagster_daemon
     restart: on-failure
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -164,7 +157,6 @@ services:
     container_name: dashboard
     ports:
       - "3001:3000"
-    env_file: .env
     environment:
       MB_DB_TYPE: postgres
       MB_DB_DBNAME: metabase
