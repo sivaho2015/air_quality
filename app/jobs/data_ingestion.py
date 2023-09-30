@@ -9,8 +9,8 @@ from ops.extract_load import (construct_station_feed_urls, get_stations_in_us,
 # Configure dbt project and profiles directories
 dbt_resource = dbt_cli_resource.configured(
     {
-        "project_dir": "./transform",
-        "profiles_dir": "./transform",
+        "project_dir": "/opt/dagster/app/transform/",
+        "profiles_dir": "/opt/dagster/app/transform/",
     }
 )
 
