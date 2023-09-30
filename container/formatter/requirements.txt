@@ -13,4 +13,5 @@ psycopg2
 dagster-dbt
 dbt-postgres
 yoyo-migrations
+flatten_json
 alembic
