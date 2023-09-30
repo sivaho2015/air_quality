@@ -10,6 +10,7 @@ import psycopg2.extras as p
 import requests
 from dagster import op
 from flatten_json import flatten
+from dotenv import load_dotenv
 from utils.config import get_warehouse_creds
 from utils.db import WarehouseConnection
 from utils.helpers import fill_missing_key_value
@@ -22,6 +23,7 @@ def get_stations_in_us(context) -> List[Dict[str, Any]]:
     long1 = context.op_config["long1"]
     lat2 = context.op_config["lat2"]
     long2 = context.op_config["long2"]
+    load_dotenv()
     api_token = os.getenv('AIR_QUALITY_API_TOKEN', '')
     url = f'''https://api.waqi.info/v2/map/bounds?latlng={lat1},{long1},{lat2},{long2}&networks=all&token={api_token}'''
     resp = requests.get(url)
