@@ -4,6 +4,7 @@ __pycache__/
 env
 .env
 test.py
+private_key.pem
 
 ###### TERRAFORM IGNORE
 # Local .terraform directories
