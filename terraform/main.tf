@@ -110,7 +110,7 @@ sudo chmod 666 /var/run/docker.sock
 sudo apt install make
 
 echo 'Clone git repo to EC2'
-cd /home/ubuntu && git clone -b migrate-to-cloud https://github.com/sivaho2015/air_quality.git
+cd /home/ubuntu && git clone https://github.com/sivaho2015/air_quality.git
 
 echo 'CD to air_quality directory'
 cd air_quality
