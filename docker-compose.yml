@@ -38,6 +38,21 @@ services:
       - dagster_network
     ports:
       - "8080:8080"
+    depends_on:
+      - cloud-store
+
+  cloud-store:
+    image: quay.io/minio/minio
+    container_name: cloud-store
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - dagster_network
 
   # Database that stores air quality data
   warehouse_db:
