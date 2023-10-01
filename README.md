@@ -1,7 +1,9 @@
 # Data engineering project: air quality data extraction to analysis
 
-Fetch real-time air quality data using aqicn.org API and load the data into a PostgreSQL warehouse. Use dbt to transform data and create dimension and fact tables.
-Metabase is then used to do analysis on air quality in the US and create a dashboard.
+1. Fetch real-time air quality data using aqicn.org API and load the data into a PostgreSQL warehouse
+2. Use dbt to transform data and create dimension and fact tables
+3. Metabase hosted on AWS EC2 is used to do analysis on air quality in the US and create a dashboard
+4. Pipeline is run by Dagster deployed to AWS EC2
 
 # Architecture diagram
 ![Architecture](assets/images/arch_diagram.png)
@@ -19,91 +21,66 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 # Directory Tree
 
 ```
-./
-│
-├── app/
-│   │
-│   ├── jobs/
-│   │   └── data_ingestion.py
-│   │
-│   ├── ops/
-│   │   └── extract_load.py
-│   │
-│   ├── schedules/
-│   │   └── data_ingestion_schedule.py
-│   │
-│   ├── transform/
-│   │   │
-│   │   ├── logs/
-│   │   │
-│   │   ├── models/
-│   │   │   │
-│   │   │   ├── marts/
-│   │   │   │   ├── core.yml
-│   │   │   │   ├── dim_station.sql
-│   │   │   │   └── fact_air_quality.sql
-│   │   │   │
-│   │   │   └── staging/
-│   │   │       ├── src.yml
-│   │   │       ├── stg.yml
-│   │   │       └── stg_station_feed_data.sql
-│   │   │
-│   │   │
-│   │   ├── dbt_project.yml
-│   │   └── profiles.yml
-│   │
-│   ├── utils/
-│   │   ├── config.py
-│   │   ├── db.py
-│   │   └── helpers.py
-│   │
-│   └── repository.py
-│
-├── assets/
-│   │
-│   └── images/
-│       ├── arch_diagram.png
-│       ├── dagster_pipeline.png
-│       ├── dagster_run.png
-│       └── dashboard.png
-│
-│
-├── container/
-│   │
-│   ├── dagster/
-│   │   └── Dockerfile
-│   │
-│   ├── formatter/
-│   │   ├── Dockerfile
-│   │   └── requirements.txt
-│   │
-│   ├── metabase/
-│   │   └── Dockerfile
-│   │
-│   └── user_code/
-│       └── Dockerfile
-│
-│
-├── data/
-│   └── .gitkeep
-│
-├── test/
-│   │
-│   └── unit/
-│       ├── test_extract_load_unit.py
-│       └── test_utils_unit.py
-│
-│
-├── warehouse_db_setup/
-│   └── create_tables.sql
-│
-├── .env
-├── .gitignore
-├── Makefile
-├── README.md
-├── dagster.yaml
-├── docker-compose.yml
-└── workspace.yaml
+air_quality/
+┣ .github/
+┃ ┗ workflows/
+┃   ┗ ci.yml
+┣ app/
+┃ ┣ jobs/
+┃ ┃ ┗ data_ingestion.py
+┃ ┣ ops/
+┃ ┃ ┗ extract_load.py
+┃ ┣ schedules/
+┃ ┃ ┗ data_ingestion_schedule.py
+┃ ┣ transform/
+┃ ┃ ┣ models/
+┃ ┃ ┃ ┣ marts/
+┃ ┃ ┃ ┃ ┣ core.yml
+┃ ┃ ┃ ┃ ┣ dim_station.sql
+┃ ┃ ┃ ┃ ┗ fact_air_quality.sql
+┃ ┃ ┃ ┗ staging/
+┃ ┃ ┃   ┣ src.yml
+┃ ┃ ┃   ┣ stg.yml
+┃ ┃ ┃   ┗ stg_station_feed_data.sql
+┃ ┃ ┣ dbt_project.yml
+┃ ┃ ┗ profiles.yml
+┃ ┣ utils/
+┃ ┃ ┣ config.py
+┃ ┃ ┣ db.py
+┃ ┃ ┗ helpers.py
+┃ ┣ .env
+┃ ┗ repository.py
+┣ assets/
+┃ ┗ images/
+┃   ┣ arch_diagram.png
+┃   ┣ dagster_pipeline.png
+┃   ┣ dagster_run.png
+┃   ┗ dashboard.png
+┣ container/
+┃ ┣ dagster/
+┃ ┃ ┗ Dockerfile
+┃ ┣ formatter/
+┃ ┃ ┣ Dockerfile
+┃ ┃ ┗ requirements.txt
+┃ ┗ user_code/
+┃   ┗ Dockerfile
+┣ terraform/
+┃ ┣ main.tf
+┃ ┣ output.tf
+┃ ┗ variable.tf
+┣ test/
+┃ ┗ unit/
+┃   ┣ test_extract_load_unit.py
+┃   ┗ test_utils_unit.py
+┣ warehouse_db_setup/
+┃ ┗ create_tables.sql
+┣ .env
+┣ .gitignore
+┣ Makefile
+┣ README.md
+┣ dagster.yaml
+┣ docker-compose.yml
+┗ workspace.yaml
 ```
 
 ## Setup
@@ -112,6 +89,9 @@ Metabase is then used to do analysis on air quality in the US and create a dashb
 
 1. [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 2. [Github account](https://github.com/)
+3. [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
+4. [AWS account](https://aws.amazon.com/)
+5. [AWS CLI Installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [configured](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html)
 3. [Air Quality Open Data Platform API Token](https://aqicn.org/data-platform/token/)
 4. [Docker](https://docs.docker.com/engine/install/) with at least 4GB of RAM and [Docker Compose](https://docs.docker.com/compose/install/) v1.27.0 or later
 
@@ -122,11 +102,22 @@ Run these commands to set up the project locally.
 git clone https://github.com/sivaho2015/air_quality.git
 cd air_quality
 
-# Enter your database connection credentials and API token in .env file
+# Paste your AWS Access Key ID and AWS Secret Access Key in .env file
 
 # Local run & test
 make up # start the docker containers on your computer
-make ci # runs auto formatting, lint checks, and all test files under ./tests
+
+# Create AWS services with Terraform
+make tf-init # Only needed on your first terraform run (or if you add new providers)
+make infra-up # type in yes after verifying the changes TF will make
+
+# Wait until the EC2 instance is initialized, you can check this via your AWS UI
+# See "Status Check" on the EC2 console, it should be "2/2 checks passed" before proceeding
+# SSH into the EC2 instance and paste your Air Quality API token in air_quality/app/.env file and run 'make up'
+
+make cloud-metabase # this command will forward Metabase port from EC2 to your machine and opens it in the browser
+
+make cloud-dagster # this command will forward Dagster port from EC2 to your machine and opens it in the browser
 ```
 
 ### Tear down infra
@@ -134,6 +125,7 @@ make ci # runs auto formatting, lint checks, and all test files under ./tests
 Run this command to tear down infrastructure
 
 ```shell
+make infra-down # destroy terraform resources
 make down # stop docker containers on your computer
 ```
 

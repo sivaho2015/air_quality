@@ -7,6 +7,7 @@ ENV PYTHONPATH=/code/app
 
 # install python requirements
 ADD container/formatter/requirements.txt requirements.txt
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # copy repo

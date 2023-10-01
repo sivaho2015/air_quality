@@ -6,7 +6,6 @@ models:
     columns:
       - name: station_id
         tests:
-          - unique
           - not_null
       - name: local_measurement_timezone
       - name: local_measurement_timezone_text

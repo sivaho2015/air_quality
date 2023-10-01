@@ -5,8 +5,11 @@ import unittest
 from unittest.mock import patch
 
 from dagster import build_op_context
-from ops.extract_load import (construct_station_feed_urls, get_stations_in_us,
-                              perform_requests)
+from ops.extract_load import (
+    construct_station_feed_urls,
+    get_stations_in_us,
+    perform_requests,
+)
 
 
 # Class that contains test cases

@@ -5,10 +5,9 @@ services:
   dagster_metadata_db:
     image: postgres:11
     container_name: dagster_metadata_db
-    env_file: .env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
       POSTGRES_DB: dagster_metadata
     networks:
       - dagster_network
@@ -21,7 +20,6 @@ services:
     container_name: dagster_code_runner
     image: dagster_code_runner_image
     restart: always
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -32,16 +30,34 @@ services:
       WAREHOUSE_DB: warehouse
       WAREHOUSE_HOST: warehouse_db
       WAREHOUSE_PORT: 5432
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION_NAME: us-east-1
+      AWS_ENDPOINT_URL: http://cloud-store:9000
     networks:
       - dagster_network
     ports:
       - "8080:8080"
+    depends_on:
+      - cloud-store
+
+  cloud-store:
+    image: quay.io/minio/minio
+    container_name: cloud-store
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    networks:
+      - dagster_network
 
   # Database that stores air quality data
   warehouse_db:
     image: postgres:13
     container_name: warehouse_db
-    env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -59,7 +75,6 @@ services:
   metabase_db:
     image: postgres
     container_name: metabase_db
-    env_file: .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -74,7 +89,6 @@ services:
     container_name: pgadmin_container
     image: dpage/pgadmin4
     restart: always
-    env_file: .env
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -103,7 +117,6 @@ services:
       - "3000"
     ports:
       - "3000:3000"
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -129,7 +142,6 @@ services:
       - run
     container_name: dagster_daemon
     restart: on-failure
-    env_file: .env
     environment:
       DAGSTER_POSTGRES_USER: ${DAGSTER_POSTGRES_USER}
       DAGSTER_POSTGRES_PASSWORD: ${DAGSTER_POSTGRES_PASSWORD}
@@ -158,20 +170,10 @@ services:
 
   # Metabase dashboard
   dashboard:
-    build:
-      context: .
-      dockerfile: ./container/metabase/Dockerfile
+    image: metabase/metabase
     container_name: dashboard
     ports:
       - "3001:3000"
-    env_file: .env
-    environment:
-      MB_DB_TYPE: postgres
-      MB_DB_DBNAME: metabase
-      MB_DB_PORT: 5432
-      MB_DB_USER: ${MB_DB_USER}
-      MB_DB_PASS: ${MB_DB_PASS}
-      MB_DB_HOST: metabase_db
     networks:
       - dagster_network
 

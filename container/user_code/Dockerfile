@@ -4,6 +4,7 @@
 FROM python:3.7-slim
 
 # Install dependent packages
+RUN pip install --upgrade pip
 RUN pip install \
     dagster \
     dagster-postgres \
@@ -13,8 +14,7 @@ RUN pip install \
     dagster-dbt \
     dbt-core \
     dbt-postgres \
-    flatten_json \
-    os
+    flatten_json
 
 WORKDIR /opt/dagster/app
 ENV PYTHONPATH=/app
