@@ -30,6 +30,10 @@ services:
       WAREHOUSE_DB: warehouse
       WAREHOUSE_HOST: warehouse_db
       WAREHOUSE_PORT: 5432
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION_NAME: us-east-1
+      AWS_ENDPOINT_URL: http://cloud-store:9000
     networks:
       - dagster_network
     ports:
