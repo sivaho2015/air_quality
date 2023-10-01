@@ -9,8 +9,8 @@ from typing import Any, Dict, List
 import psycopg2.extras as p
 import requests
 from dagster import op
-from flatten_json import flatten
 from dotenv import load_dotenv
+from flatten_json import flatten
 from utils.config import get_warehouse_creds
 from utils.db import WarehouseConnection
 from utils.helpers import fill_missing_key_value

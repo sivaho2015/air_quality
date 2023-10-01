@@ -3,8 +3,12 @@ Construct Dagster data pipeline and configure its run inputs
 '''
 from dagster import job
 from dagster_dbt import dbt_cli_resource, dbt_run_op, dbt_test_op
-from ops.extract_load import (construct_station_feed_urls, get_stations_in_us,
-                              load_station_feed_data, perform_requests)
+from ops.extract_load import (
+    construct_station_feed_urls,
+    get_stations_in_us,
+    load_station_feed_data,
+    perform_requests,
+)
 
 # Configure dbt project and profiles directories
 dbt_resource = dbt_cli_resource.configured(
@@ -27,6 +31,7 @@ run_config = {
         }
     }
 }
+
 
 # Construct data pipeline
 @job(resource_defs={"dbt": dbt_resource}, config=run_config)
