@@ -104,7 +104,6 @@ cd air_quality
 
 # Paste your AWS Access Key ID and AWS Secret Access Key in .env file
 
-
 # Local run & test
 make up # start the docker containers on your computer
 
@@ -126,6 +125,7 @@ make cloud-dagster # this command will forward Dagster port from EC2 to your mac
 Run this command to tear down infrastructure
 
 ```shell
+make infra-down # destroy terraform resources
 make down # stop docker containers on your computer
 ```
 
