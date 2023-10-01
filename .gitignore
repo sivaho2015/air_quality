@@ -2,7 +2,6 @@ data/*
 !data/.gitkeep
 __pycache__/
 env
-.env
 test.py
 private_key.pem
 
